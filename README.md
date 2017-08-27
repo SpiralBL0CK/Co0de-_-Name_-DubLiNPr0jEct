@@ -1,7 +1,7 @@
 # Co0de-_-Name_-DubLiNPr0jEct
 AntiVirus Pr0ject for COderDojo Coolest-Projects COmpetition
 A lot have to be done yet,not even close to be finished.
-Protection Methods implemented yet:
+Protection Methods implemented until yet:
 
 -- checksum 
 
