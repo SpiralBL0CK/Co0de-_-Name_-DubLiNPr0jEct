@@ -3,7 +3,7 @@ AntiVirus Pr0ject for COderDojo Coolest-Projects COmpetition
 A lot have to be done yet,not even close to be finished.
 Protection Methods implemented until yet:
 
--- checksum 
+-- checksum under construction
 
 -- if it's bigger than 500 mb than we ignore it done
 
