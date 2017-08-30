@@ -13,11 +13,13 @@ import time
 import re
 import pwnlib.constants
 from capstone import *
+from capstone.x86_const import *
 import pwnlib.gdb
 import pwnlib.elf.elf
 import sched
 from logging import Logger as logger
 import sys
+import zipfile
 class ProgramScanned:
     FILE = 'virus_signature.txt'
     def __init__(self):
@@ -81,18 +83,49 @@ class ProgramScanned:
                     a = False
                     counter+=1
                     print counter
-        
-            
+                
     '''Start looking for CPU,NIC,GPU'''
     def look_up(self):
-        print 1 
+        self.x = raw_input()
+        while True:
+            '''CPU INFO'''
+            #print psutil.cpu_times()
+            #print psutil.cpu_percent(percpu=True)
+            #print psutil.cpu_freq()
+            #print psutil.cpu_count(logical=False)
+            #print psutil.cpu_stats()
+            #if mem taken by process bigger than > size kill 
+            
+            '''memory info'''
+            #process = psutil.Process(self.x)
+            #print process.memory_percent()
+            #print psutil.virtual_memory()
+            #print psutil.swap_memory()
+            x = psutil.pids()
+            for i in x:
+                p = psutil.Process(i)
+                print p.name()
+                #print p.parent()
+                print '\n'
+                print '\n'
+                #print p.children()
+            
+            '''NIC info'''
+            #print psutil.net_io_counters(pernic=True)
+            #print psutil.net_connections()
+            #print psutil.net_if_addrs()
+            '''PID INFO ALSO HERE WILL BE HAPPENING SOME MAGIC'''
+            #print psutil.pids():
+                
+                
+            time.sleep(3)
         
     def companion_infect(self):
         for dirname, dirnames, filenames in os.walk('.'):
             print filenames
         for i in filenames:
-            if '.com' in i:
-                os.system("rm -rf *.com")
+            if ('.COM' in i):
+                os.system("rm -rf *.COM")
                 
     def disassemble_programm(self):
         self.program = raw_input('program to dis')
@@ -104,13 +137,15 @@ class ProgramScanned:
         #print pwnlib.elf.elf.disasm(file('a.out','rb').read())
         for i in new_result:
             new_string+='b'+'\\x'+i[0:2]+'\\x'+i[2:]
-        #print new_string
+        new_string = new_string[:len(new_string)-4]
         try:
             if sys.maxsize > 2 ** 32:
                 if sys.byteorder == 'little':
                     md = Cs(CS_ARCH_X86, CS_MODE_64+CS_MODE_LITTLE_ENDIAN)
+                    md.detail = True
                 elif sys.byteorder == 'big':
                     md = Cs(CS_ARCH_X86, CS_MODE_64+CS_MODE_BIG_ENDIAN)
+                    md.detail = True
                 else:
                     print "error detecting the architecture of your PC.\
                     Please talk to your sysadmin"
@@ -118,14 +153,16 @@ class ProgramScanned:
             else:
                 if sys.byteorder == 'little':
                     md = Cs(CS_ARCH_X86, CS_MODE_32+CS_MODE_LITTLE_ENDIAN)
+                    md.detail = True
                 elif sys.byteorder == 'big':
                     md = Cs(CS_ARCH_X86, CS_MODE_32+CS_MODE_BIG_ENDIAN)
+                    md.detail = True
                 else:
                     print "error detecting the architecture of your PC.\
                     Please talk to your sysadmin"
                     logger.error('cant detect endian architecture')
-            for (address, size, mnemonic, op_str) in md.disasm_lite(new_string, 0x1000):
-                     print("0x%x:\t%s\t%s" %(address, mnemonic, op_str))
+                for i in md.disasm(new_string,0x080483db):
+                      print("0x%x:\t%s\t%s" %(i.address, i.mnemonic, i.op_str))
         except ImportError:
             print "We are sorry for the inconvenience,you may have\
             not installed all dependencies!"
@@ -136,5 +173,25 @@ def main():
     #x.companion_infect()
     #x.analyze()
     x.disassemble_programm()
-    
+    #x.look_up()
 main()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
