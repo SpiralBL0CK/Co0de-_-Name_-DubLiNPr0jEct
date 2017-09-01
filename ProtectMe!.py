@@ -21,9 +21,11 @@ from logging import Logger as logger
 import sys
 import zipfile
 import itertools
-from docx import Document
-from docx.shared import Inches
+#from docx import Document
+#from docx.shared import Inches
 import socket
+import tempfile
+
 HOST = '127.0.0.1'
 PORT = 80
 PROGRAM = raw_input('Program to be analyzed')
@@ -199,10 +201,19 @@ class ProgramScanned:
     def parse_doc_windows(self):
         k = []
         self.input = raw_input('windows document to be scanned')
-        docx = zipfile.ZipFile('{}'.format(self.input))
-        for i in docx.infolist():
-            k.append(docx.read(i))
-        print k
+        try:
+            docx = zipfile.ZipFile('{}'.format(self.input))
+            for i in docx.infolist():
+                k.append(docx.read(i))
+        except IOError:
+            print 'error'
+        pre,ext = os.path.splitext(self.input)
+        os.rename(self.input,pre+'.zip')
+        tmp_dir = tempfile.mkdtemp()
+        print('created temporary directory', tmp_dir)
+        zip_ref = zipfile.ZipFile(os.getcwd(), 'r')
+        zip_ref.extractall(tmp_dir)
+        tmp_dir.close()
         
     def final_raport(self):
         self.input = ""
@@ -210,21 +221,17 @@ class ProgramScanned:
         document.add_heading('Final diagnose based on out analysis for your document:{}'.format(self.input), 0)
         p = document.add_paragraph()
 
-      
+        
+        
 def main():
     x = ProgramScanned()
     #x.companion_infect()
     #x.analyze()
     #x.disassemble_programm()
     #x.look_up()
-    #x.parse_doc_windows()
-    x.recive_md5()
+    x.parse_doc_windows()
+    #x.recive_md5()
 main()
-
-
-
-
-
 
 
 
