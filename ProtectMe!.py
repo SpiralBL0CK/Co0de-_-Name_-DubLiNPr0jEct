@@ -210,8 +210,16 @@ class ProgramScanned:
         document.add_heading('Final diagnose based on out analysis for your document:{}'.format(self.input), 0)
         p = document.add_paragraph()
 
-        
-
+      
+def main():
+    x = ProgramScanned()
+    #x.companion_infect()
+    #x.analyze()
+    #x.disassemble_programm()
+    #x.look_up()
+    #x.parse_doc_windows()
+    x.recive_md5()
+main()
 
 
 
