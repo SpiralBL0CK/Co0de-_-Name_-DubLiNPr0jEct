@@ -3,6 +3,7 @@ import optparse
 import sqlite3
 import re
 import md5
+import random
 parser = optparse.OptionParser()
 parser.add_option("-v", action="store_true", dest="update")
 parser.add_option("-q", action="store_false", dest="update")
@@ -59,4 +60,25 @@ def compare():
     except sqlite3.Error:
         print 'error occured when oppening database'
 
-compare()
+def encode():
+    '''
+        Generate public key
+    '''
+    max_nr =10
+    first_number = []
+    second_number = []
+    for i in range(1024):
+        first_number.append(random.choice(range(max_nr)))
+    first_number = re.sub('[^\w]','',str(first_number))
+    
+    for z in range(1024):
+        second_number.append(random.choice(range(max_nr)))
+    second_number = re.sub('[^\w]','',str(second_number))
+    
+    n = int(first_number)*int(second_number)
+    phi = int((int(first_number)-1)*(int(second_number)-1))
+    e = 3
+    #d = 
+encode()
+    
+        
