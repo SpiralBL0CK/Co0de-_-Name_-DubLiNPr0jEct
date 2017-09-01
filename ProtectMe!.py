@@ -20,6 +20,14 @@ import sched
 from logging import Logger as logger
 import sys
 import zipfile
+import itertools
+from docx import Document
+from docx.shared import Inches
+import socket
+HOST = '127.0.0.1'
+PORT = 80
+PROGRAM = raw_input('Program to be analyzed')
+
 class ProgramScanned:
     FILE = 'virus_signature.txt'
     def __init__(self):
@@ -167,20 +175,42 @@ class ProgramScanned:
             print "We are sorry for the inconvenience,you may have\
             not installed all dependencies!"
             logger.error('cant import capstone,unsatisfied dependencies')
+            
+    def heuritics():
+        pass
+    
+    def recive_md5(self):
+        try:
+            self.s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+            self.s.connect((HOST,PORT))
+            while 1:
+                self.s.sendall('Hi there, is there any update?')
+                self.data = self.s.recv(3072)
+                if not self.data:
+                    self.s.close()
+                    sys.exit()
+                print self.data
+        except socket.error:
+            print "sorry no data send!"
+        except socket.gaierror:
+            print "sorry host unreachable!"
 
-def main():
-    x = ProgramScanned()
-    #x.companion_infect()
-    #x.analyze()
-    x.disassemble_programm()
-    #x.look_up()
-main()
+    
+    def parse_doc_windows(self):
+        k = []
+        self.input = raw_input('windows document to be scanned')
+        docx = zipfile.ZipFile('{}'.format(self.input))
+        for i in docx.infolist():
+            k.append(docx.read(i))
+        print k
+        
+    def final_raport(self):
+        self.input = ""
+        raport = Document()
+        document.add_heading('Final diagnose based on out analysis for your document:{}'.format(self.input), 0)
+        p = document.add_paragraph()
 
-
-
-
-
-
+        
 
 
 
