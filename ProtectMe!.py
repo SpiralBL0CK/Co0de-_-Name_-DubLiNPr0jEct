@@ -25,10 +25,38 @@ import itertools
 #from docx.shared import Inches
 import socket
 import tempfile
-
+from pyfiglet import Figlet
+import threading
+from termcolor import colored
 HOST = '127.0.0.1'
 PORT = 80
-PROGRAM = raw_input('Program to be analyzed')
+f = Figlet(font='graffiti')
+print f.renderText('PR0TeCTMe!')
+done = False
+#here is the animation
+def animate():
+    for c in itertools.cycle(['|', '/', '-', '\\']):
+        if done:
+            break
+        sys.stdout.write('\r'+ colored('loading','green') + c)
+        sys.stdout.flush()
+        time.sleep(0.1)
+    sys.stdout.write('\rDone!   ')
+    sys.stdout.flush()
+    sys.stdout.write('\r\n')
+
+
+
+t = threading.Thread(target=animate)
+t.start()
+
+#long process here
+time.sleep(1)
+done = True
+
+
+
+#PROGRAM = raw_input('Program to be analyzed')
 
 class ProgramScanned:
     FILE = 'virus_signature.txt'
@@ -182,6 +210,21 @@ class ProgramScanned:
         pass
     
     def recive_md5(self):
+        max_nr =10
+        first_number = []
+        second_number = []
+        for i in range(1024):
+            first_number.append(random.choice(range(max_nr)))
+        first_number = re.sub('[^\w]','',str(first_number))
+        
+        for z in range(1024):
+            second_number.append(random.choice(range(max_nr)))
+        second_number = re.sub('[^\w]','',str(second_number))
+        
+        n = int(first_number)*int(second_number)
+        phi = int((int(first_number)-1)*(int(second_number)-1))
+        e = 3
+        #d = 
         try:
             self.s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
             self.s.connect((HOST,PORT))
@@ -227,16 +270,8 @@ def main():
     x = ProgramScanned()
     #x.companion_infect()
     #x.analyze()
-    #x.disassemble_programm()
+    x.disassemble_programm()
     #x.look_up()
-    x.parse_doc_windows()
+    #x.parse_doc_windows()
     #x.recive_md5()
 main()
-
-
-
-
-
-
-
-
